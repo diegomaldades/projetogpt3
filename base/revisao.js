@@ -1,4 +1,5 @@
 let gabarito = {};
+let explicacoes = {}; // Add variable for explanations
 let ano = null;
 let dia = null;
 let respostasUsuario = {};
@@ -37,30 +38,39 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    carregarGabaritoParaRevisao();
+    carregarGabaritoEExplicacoesParaRevisao(); // Renamed function
 });
 
-function carregarGabaritoParaRevisao() {
+function carregarGabaritoEExplicacoesParaRevisao() { // Renamed function
     const gabaritoPath = `../${ano}/${dia}/gabarito_${dia}.json`;
-    fetch(gabaritoPath)
-        .then(res => {
+    const explicacoesPath = `../${ano}/${dia}/explicacoes_${dia}.json`; // Path to explanations JSON
+
+    Promise.all([
+        fetch(gabaritoPath).then(res => {
             if (!res.ok) throw new Error(`Gabarito não encontrado para ${ano} ${dia}.`);
             return res.json();
+        }),
+        fetch(explicacoesPath).then(res => {
+            // Explanations might not exist for all days/years, handle gracefully
+            if (!res.ok) return {}; // Return empty object if not found
+            return res.json();
         })
-        .then(data => {
-            if (typeof data !== "object" || data === null || Object.keys(data).length === 0) {
-                throw new Error("Formato inválido ou gabarito vazio.");
-            }
-            gabarito = data;
-            questoesIds = Object.keys(gabarito).sort((a, b) => parseInt(a) - parseInt(b));
-            exibirRevisao();
-        })
-        .catch(err => {
-            console.error("Erro ao carregar gabarito para revisão:", err);
-            document.getElementById("loading-review").textContent = 
-                `Erro ao carregar gabarito: ${err.message}`;
-            document.getElementById("loading-review").style.color = "red";
-        });
+    ])
+    .then(([gabaritoData, explicacoesData]) => {
+        if (typeof gabaritoData !== "object" || gabaritoData === null || Object.keys(gabaritoData).length === 0) {
+            throw new Error("Formato inválido ou gabarito vazio.");
+        }
+        gabarito = gabaritoData;
+        explicacoes = explicacoesData; // Store explanations
+        questoesIds = Object.keys(gabarito).sort((a, b) => parseInt(a) - parseInt(b));
+        exibirRevisao();
+    })
+    .catch(err => {
+        console.error("Erro ao carregar dados para revisão:", err);
+        document.getElementById("loading-review").textContent = 
+            `Erro ao carregar dados: ${err.message}`;
+        document.getElementById("loading-review").style.color = "red";
+    });
 }
 
 // Função para carregar imagens (igual à do simulado.js, pode ser refatorada para um arquivo comum no futuro)
@@ -156,7 +166,20 @@ function exibirRevisao() {
             Resposta Correta: <span class="correct-answer">${respostaCorreta}</span>
         `;
 
+        // Add explanation section
+        const divExplicacao = document.createElement("div");
+        divExplicacao.className = "explanation-review";
+        const explicacaoTexto = explicacoes[numero]; // Get explanation from loaded data
+        if (explicacaoTexto) {
+            // Use innerHTML to render potential markdown line breaks (\n -> <br>)
+            divExplicacao.innerHTML = `<strong>Explicação:</strong><br>${explicacaoTexto.replace(/\n/g, '<br>')}`;
+        } else {
+            divExplicacao.innerHTML = `<strong>Explicação:</strong> (Não disponível)`;
+            divExplicacao.style.fontStyle = "italic";
+            divExplicacao.style.color = "#888";
+        }
         divQuestao.appendChild(divInfo);
+        divQuestao.appendChild(divExplicacao); // Append explanation div
         reviewArea.appendChild(divQuestao);
     });
 
