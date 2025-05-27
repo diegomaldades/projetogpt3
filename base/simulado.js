@@ -66,7 +66,7 @@ function carregarGabaritoEQuestoes() {
 
 // Função para carregar imagens (adaptada de antes)
 function carregarImagensQuestao(numeroQuestao, containerImagens) {
-    containerImagens.innerHTML = "; // Limpa imagens anteriores
+    containerImagens.innerHTML = ""; // Limpa imagens anteriores
     const numeroSemZero = parseInt(numeroQuestao, 10).toString(); // Garante que não tem zero à esquerda
     const basePath = `../${ano}/${dia}/imagens/q${numeroSemZero}`;
     let sufixoCharCode = 97; // 'a'
@@ -95,10 +95,12 @@ function carregarImagensQuestao(numeroQuestao, containerImagens) {
                     tentarCarregarSufixo();
                 } else {
                     if (!baseCarregada && sufixoCharCode === 97 && !algumaImagemCarregada) {
-                        const aviso = document.createElement("p");
-                        aviso.textContent = `[Imagem(ns) não encontrada(s) para questão ${numeroQuestao}]`;
-                        aviso.style.color = "orange";
-                        containerImagens.appendChild(aviso);
+                        // Usar a imagem de placeholder em vez de texto
+                        const imgPlaceholder = document.createElement("img");
+                        imgPlaceholder.src = "../assets/sem_imagem.png";
+                        imgPlaceholder.alt = "Imagem não disponível";
+                        imgPlaceholder.style.maxWidth = "100%";
+                        containerImagens.appendChild(imgPlaceholder);
                     }
                 }
             });
