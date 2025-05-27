@@ -1,0 +1,50 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  background-color: #121212;
+  color: #ffffff;
+  text-align: center;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  background-color: #1e1e1e;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+.year-button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 15px;
+  font-size: 18px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.year-button:hover {
+  background-color: #dddddd;
+}
+
+/* Estilo para botões desabilitados (anos sem conteúdo) */
+.year-button:disabled {
+    background-color: #555555; /* Cinza escuro */
+    color: #aaaaaa; /* Cinza claro */
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.year-button:disabled:hover {
+    background-color: #555555; /* Mantém a cor no hover */
+}

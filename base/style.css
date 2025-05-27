@@ -1,0 +1,84 @@
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  text-align: center;
+}
+
+img {
+  max-width: 90%; /* Ajustado para 100% abaixo */
+  margin-bottom: 10px;
+}
+
+.question {
+  margin-bottom: 30px;
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left; /* Alinha texto da questão à esquerda */
+}
+
+.question img {
+    max-width: 100%; /* Garante que a imagem não ultrapasse o container */
+    height: auto; /* Mantém a proporção */
+    display: block; /* Evita espaços extras abaixo da imagem */
+    margin: 15px auto; /* Centraliza a imagem com margem */
+}
+
+.question h3 {
+    text-align: center; /* Centraliza título da questão */
+    margin-bottom: 20px;
+}
+
+.question label {
+    display: block; /* Coloca o label em linha própria */
+    margin-top: 15px;
+    text-align: center; /* Centraliza o label e select */
+}
+
+select {
+  font-size: 16px;
+  padding: 8px 12px; /* Aumenta padding */
+  margin-top: 10px;
+  min-width: 80px; /* Largura mínima */
+  border-radius: 5px;
+}
+
+button {
+  padding: 12px 25px; /* Aumenta padding */
+  font-size: 16px;
+  margin-top: 30px;
+  cursor: pointer;
+  background-color: #4CAF50; /* Verde */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Estilos para feedback (opcional, para melhoria futura) */
+.correct {
+    border: 2px solid green;
+}
+
+.incorrect {
+    border: 2px solid red;
+}
+
+/* Media Query para telas menores */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  .question {
+    padding: 15px;
+  }
+  button {
+      padding: 10px 20px;
+  }
+}
