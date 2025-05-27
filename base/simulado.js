@@ -124,8 +124,8 @@ function carregarQuestoes() {
         divImagens.className = "imagens-questao"; // Classe para estilização se necessário
         divQuestao.appendChild(divImagens);
 
-        // Carrega as imagens da questão
-        carregarImagensQuestao(numero, divImagens);
+        // Carrega as imagens da questão (convertendo o número para remover zeros à esquerda)
+        carregarImagensQuestao(parseInt(numero, 10).toString(), divImagens);
 
         // Adiciona o seletor de resposta
         const label = document.createElement("label");
