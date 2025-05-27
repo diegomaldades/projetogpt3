@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selecionar Modo - Simulado ENEM</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .mode-button {
+        /* Estilo similar ao year/day-button */
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #4CAF50; /* Verde para começar */
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .mode-button.gabarito {
+        background-color: #2196F3; /* Azul para gabarito */
+    }
+    .mode-button:hover {
+        opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="select-mode-title">Escolha o Modo</h1>
+    <div id="mode-buttons-container">
+      <button id="start-button" class="mode-button">Começar Simulado</button>
+      <button id="gabarito-button" class="mode-button gabarito">Ver Gabarito</button>
+    </div>
+    <button onclick="window.history.back()" style="margin-top: 20px; background-color: #f44336;">Voltar</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ano = urlParams.get("ano");
+      const dia = urlParams.get("dia");
+
+      if (!ano || !dia) {
+        alert("Ano ou Dia não especificado!");
+        // Idealmente, voltar para a seleção de ano ou dia
+        window.location.href = "../index.html";
+        return;
+      }
+
+      document.getElementById("select-mode-title").textContent = 
+        `Escolha o Modo - ${ano.replace("enem", "ENEM ")} ${dia.replace("dia", "Dia ")}`;
+
+      const startButton = document.getElementById("start-button");
+      const gabaritoButton = document.getElementById("gabarito-button");
+
+      startButton.onclick = () => {
+        // Redireciona para a página do simulado
+        window.location.href = `simulado.html?ano=${ano}&dia=${dia}`;
+      };
+
+      gabaritoButton.onclick = () => {
+        // Redireciona para a página de visualização do gabarito
+        window.location.href = `gabarito.html?ano=${ano}&dia=${dia}`;
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-function abrirSimulado(pasta) {
-  // Redireciona para a base passando o ano como parâmetro na URL
-  window.location.href = `base/index.html?ano=${pasta}`;
+function abrirSelecaoDia(ano) {
+  // Redireciona para a tela de seleção de dia, passando o ano
+  window.location.href = `base/selecionar_dia.html?ano=${ano}`;
 }

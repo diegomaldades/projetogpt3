@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selecionar Dia - Simulado ENEM</title>
+  <!-- Reutilizar o CSS principal ou criar um específico -->
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* Estilos adicionais podem ser colocados aqui ou em style.css */
+    .day-button {
+        /* Estilo similar ao year-button, ajustar conforme necessário */
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .day-button:hover:not(:disabled) {
+        background-color: #dddddd;
+    }
+    .day-button:disabled {
+        background-color: #555555;
+        color: #aaaaaa;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="select-day-title">Selecionar Dia</h1>
+    <div id="day-buttons-container">
+      <!-- Botões serão adicionados dinamicamente pelo JS -->
+      <p>Carregando dias disponíveis...</p>
+    </div>
+    <button onclick="window.history.back()" style="margin-top: 20px; background-color: #f44336;">Voltar</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ano = urlParams.get("ano");
+
+      if (!ano) {
+        alert("Ano não especificado!");
+        window.location.href = "../index.html";
+        return;
+      }
+
+      document.getElementById("select-day-title").textContent = `Selecionar Dia - ${ano.replace("enem", "ENEM ")}`;
+      const container = document.getElementById("day-buttons-container");
+      container.innerHTML = "; // Limpa o container
+
+      // --- Lógica para verificar dias disponíveis (simplificada por enquanto) ---
+      // No futuro, isso poderia verificar a existência das pastas/arquivos
+      const diasDisponiveis = {
+          "enem2024": ["dia1"] // Apenas dia 1 disponível para 2024 por enquanto
+          // Adicionar outros anos/dias aqui quando disponíveis
+      };
+
+      const diasParaAno = diasDisponiveis[ano] || [];
+
+      if (diasParaAno.length === 0) {
+          container.innerHTML = 
+            `<p style="color: orange;">Nenhum dia de prova encontrado para ${ano.replace("enem", "ENEM ")}.</p>`;
+          return;
+      }
+
+      // Adiciona botão Dia 1 (se disponível)
+      if (diasParaAno.includes("dia1")) {
+          const btnDia1 = document.createElement("button");
+          btnDia1.className = "day-button";
+          btnDia1.textContent = "Dia 1";
+          btnDia1.onclick = () => selecionarModo(ano, "dia1");
+          container.appendChild(btnDia1);
+      } else {
+          // Se não estiver disponível, mostra desabilitado (opcional)
+      }
+
+      // Adiciona botão Dia 2 (sempre desabilitado por enquanto)
+      const btnDia2 = document.createElement("button");
+      btnDia2.className = "day-button";
+      btnDia2.textContent = "Dia 2 (Indisponível)";
+      btnDia2.disabled = true;
+      container.appendChild(btnDia2);
+
+    });
+
+    function selecionarModo(ano, dia) {
+      window.location.href = `selecionar_modo.html?ano=${ano}&dia=${dia}`;
+    }
+  </script>
+</body>
+</html>

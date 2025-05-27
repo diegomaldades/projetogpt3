@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gabarito - Simulado ENEM</title>
+  <link rel="stylesheet" href="style.css"> <!-- Reutilizar ou adaptar CSS -->
+  <style>
+    /* Estilos podem ser herdados ou adaptados de revisao.css/style.css */
+    .gabarito-container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    .question-gabarito {
+      margin-bottom: 40px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #1e1e1e; /* Fundo escuro */
+      border: 1px solid #444; /* Borda sutil */
+      position: relative;
+    }
+    .question-gabarito img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 15px auto;
+    }
+    .gabarito-info {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #444;
+        text-align: center;
+        font-size: 1.1em;
+    }
+    .correct-answer-gabarito {
+        color: #90EE90; /* Verde claro */
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    .question-number-badge-gabarito {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #555;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="gabarito-container">
+    <h1 id="gabarito-header" style="text-align: center;">Gabarito</h1>
+
+    <div id="gabarito-area">
+      <!-- As questões e respostas corretas serão carregadas aqui -->
+      <p id="loading-gabarito" style="text-align: center; padding: 50px;">Carregando gabarito...</p>
+    </div>
+
+     <div style="text-align: center; margin-top: 30px;">
+        <!-- Botão para voltar à seleção de modo ou início -->
+        <button onclick="window.history.back()" class="nav-button" style="background-color: #f44336;">Voltar</button>
+        <button onclick="window.location.href=\'../index.html\'" class="nav-button">Voltar ao Início</button>
+    </div>
+
+  </div>
+
+  <script src="gabarito.js"></script>
+</body>
+</html>

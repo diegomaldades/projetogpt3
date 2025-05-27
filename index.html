@@ -9,11 +9,12 @@
 <body>
   <div class="container">
     <h1>Simulado ENEM</h1>
-    <button class="year-button" onclick="abrirSimulado('enem2024')">ENEM 2024</button>
-    <button class="year-button" onclick="abrirSimulado('enem2023')" disabled>ENEM 2023 (Indisponível)</button>
-    <button class="year-button" onclick="abrirSimulado('enem2022')" disabled>ENEM 2022 (Indisponível)</button>
-    <button class="year-button" onclick="abrirSimulado('enem2021')" disabled>ENEM 2021 (Indisponível)</button>
-    <button class="year-button" onclick="abrirSimulado('enem2020')" disabled>ENEM 2020 (Indisponível)</button>
+    <!-- Corrigido: Removido backslash antes das aspas simples no onclick -->
+    <button class="year-button" onclick="abrirSelecaoDia('enem2024')">ENEM 2024</button>
+    <button class="year-button" onclick="abrirSelecaoDia('enem2023')" disabled>ENEM 2023 (Indisponível)</button>
+    <button class="year-button" onclick="abrirSelecaoDia('enem2022')" disabled>ENEM 2022 (Indisponível)</button>
+    <button class="year-button" onclick="abrirSelecaoDia('enem2021')" disabled>ENEM 2021 (Indisponível)</button>
+    <button class="year-button" onclick="abrirSelecaoDia('enem2020')" disabled>ENEM 2020 (Indisponível)</button>
   </div>
 
   <script src="script.js"></script>

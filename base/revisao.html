@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Revisão do Simulado - ENEM</title>
+  <link rel="stylesheet" href="style.css"> <!-- Reutilizar ou adaptar CSS -->
+  <style>
+    /* Estilos específicos para a página de revisão */
+    .review-container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    .search-container {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    #search-input {
+      padding: 10px;
+      font-size: 16px;
+      width: 200px;
+      margin-right: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #search-button {
+        padding: 10px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        background-color: #2196F3;
+        color: white;
+    }
+    .question-review {
+      margin-bottom: 40px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #1e1e1e; /* Fundo escuro */
+      border: 2px solid transparent; /* Borda inicial transparente */
+      position: relative; /* Para posicionar o número da questão */
+    }
+    .question-review.correct {
+      border-color: #4CAF50; /* Borda verde para acerto */
+    }
+    .question-review.incorrect {
+      border-color: #f44336; /* Borda vermelha para erro */
+    }
+    .question-review img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 15px auto;
+    }
+    .review-info {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #444;
+        text-align: center;
+        font-size: 1.1em;
+    }
+    .user-answer {
+        font-weight: bold;
+    }
+    .user-answer.correct {
+        color: #4CAF50; /* Verde */
+    }
+    .user-answer.incorrect {
+        color: #f44336; /* Vermelho */
+    }
+    .correct-answer {
+        color: #90EE90; /* Verde claro */
+    }
+    .question-number-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #555;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="review-container">
+    <h1 id="review-header" style="text-align: center;">Revisão do Simulado</h1>
+
+    <div class="search-container">
+      <label for="search-input">Buscar Questão:</label>
+      <input type="number" id="search-input" placeholder="Nº da questão">
+      <button id="search-button">Buscar</button>
+    </div>
+
+    <div id="review-area">
+      <!-- As questões revisadas serão carregadas aqui -->
+      <p id="loading-review" style="text-align: center; padding: 50px;">Carregando revisão...</p>
+    </div>
+
+     <div style="text-align: center; margin-top: 30px;">
+        <button onclick="window.location.href='../index.html'" class="nav-button">Voltar ao Início</button>
+    </div>
+  </div>
+
+  <script src="revisao.js"></script>
+</body>
+</html>

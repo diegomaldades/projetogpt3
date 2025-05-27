@@ -1,63 +1,79 @@
 let gabarito = {};
 let ano = null;
+let dia = null;
+let questoesIds = []; // Array com os IDs das questões (ex: ["1", "2", ... "90"])
+let respostasUsuario = {}; // Objeto para armazenar as respostas { "1": "A", "2": "C", ... }
+let questaoAtualIndex = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     ano = urlParams.get("ano");
+    dia = urlParams.get("dia");
 
-    if (!ano) {
-        alert("Ano não especificado!");
-        // Redireciona para a página inicial se o ano não for encontrado
+    if (!ano || !dia) {
+        alert("Ano ou Dia não especificado!");
         window.location.href = "../index.html";
-        return; // Interrompe a execução se não houver ano
+        return;
     }
 
-    // Define o título da página com o ano
-    document.title = `Simulado ENEM ${ano.replace('enem', '')}`;
-    document.getElementById('simulado-title').textContent = `Simulado ENEM ${ano.replace('enem', '')}`;
+    document.getElementById("simulado-header").textContent = 
+        `Simulado ENEM ${ano.replace("enem", "")} - ${dia.replace("dia", "Dia ")}`;
 
-    carregarGabarito();
+    // Adiciona listeners aos botões de navegação
+    document.getElementById("prev-button").addEventListener("click", mostrarQuestaoAnterior);
+    document.getElementById("next-button").addEventListener("click", mostrarProximaQuestao);
+    document.getElementById("finish-button").addEventListener("click", finalizarSimulado);
+
+    // Adiciona listeners aos botões de resposta
+    document.querySelectorAll(".answer-button").forEach(button => {
+        button.addEventListener("click", () => selecionarResposta(button.dataset.option));
+    });
+
+    carregarGabaritoEQuestoes();
 });
 
-function carregarGabarito() {
-    const gabaritoPath = `../${ano}/gabarito.json`;
+function carregarGabaritoEQuestoes() {
+    const gabaritoPath = `../${ano}/${dia}/gabarito_${dia}.json`;
     fetch(gabaritoPath)
         .then(res => {
-            if (!res.ok) {
-                // Se o gabarito não for encontrado, informa o usuário e redireciona
-                throw new Error(`Gabarito para ${ano} não encontrado.`);
-            }
+            if (!res.ok) throw new Error(`Gabarito não encontrado para ${ano} ${dia}.`);
             return res.json();
         })
         .then(data => {
-            // Verifica se o gabarito tem o formato esperado (um objeto)
-            if (typeof data !== 'object' || data === null) {
-                throw new Error("Formato inválido do gabarito.");
+            if (typeof data !== "object" || data === null || Object.keys(data).length === 0) {
+                throw new Error("Formato inválido ou gabarito vazio.");
             }
             gabarito = data;
-            // Verifica se o gabarito não está vazio
-            if (Object.keys(gabarito).length === 0) {
-                throw new Error("Gabarito vazio ou inválido.");
+            // Ordena as chaves (números das questões) numericamente
+            questoesIds = Object.keys(gabarito).sort((a, b) => parseInt(a) - parseInt(b));
+            // Tenta carregar respostas salvas (se houver)
+            const savedAnswers = localStorage.getItem(`respostas_${ano}_${dia}`);
+            if (savedAnswers) {
+                respostasUsuario = JSON.parse(savedAnswers);
             }
-            carregarQuestoes();
+            // Inicia exibindo a primeira questão
+            mostrarQuestao(questaoAtualIndex);
+            document.getElementById("loading-message").style.display = "none";
+            document.querySelector(".question-container").style.display = "block";
         })
         .catch(err => {
             console.error("Erro ao carregar gabarito:", err);
-            alert(`Erro ao carregar o simulado: ${err.message}\nVerifique se os arquivos do ano ${ano} existem e estão corretos.`);
-            // Opcional: redirecionar ou mostrar mensagem mais elaborada
-            // window.location.href = "../index.html";
+            document.getElementById("loading-message").textContent = 
+                `Erro ao carregar o simulado: ${err.message}`;
+            document.getElementById("loading-message").style.color = "red";
         });
 }
 
-// Função para carregar imagens de uma questão, incluindo partes múltiplas
+// Função para carregar imagens (adaptada de antes)
 function carregarImagensQuestao(numeroQuestao, containerImagens) {
-    const basePath = `../${ano}/imagens/q${numeroQuestao}`;
-    let sufixoCharCode = 97; // Código ASCII para 'a'
+    containerImagens.innerHTML = "; // Limpa imagens anteriores
+    const numeroSemZero = parseInt(numeroQuestao, 10).toString(); // Garante que não tem zero à esquerda
+    const basePath = `../${ano}/${dia}/imagens/q${numeroSemZero}`;
+    let sufixoCharCode = 97; // 'a'
     let algumaImagemCarregada = false;
 
-    // Função interna para tentar carregar uma imagem específica
     function tentarCarregar(path, altText) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const img = new Image();
             img.src = path;
             img.alt = altText;
@@ -66,23 +82,18 @@ function carregarImagensQuestao(numeroQuestao, containerImagens) {
                 algumaImagemCarregada = true;
                 resolve(true);
             };
-            img.onerror = () => {
-                resolve(false); // Resolve como false se a imagem não carregar
-            };
+            img.onerror = () => resolve(false);
         });
     }
 
-    // Tenta carregar a imagem base primeiro
     tentarCarregar(`${basePath}.jpeg`, `Questão ${numeroQuestao}`).then(baseCarregada => {
-        // Função recursiva para tentar carregar sufixos 'a', 'b', 'c', ...
         function tentarCarregarSufixo() {
             const sufixo = String.fromCharCode(sufixoCharCode);
             tentarCarregar(`${basePath}${sufixo}.jpeg`, `Questão ${numeroQuestao}${sufixo}`).then(sufixoCarregado => {
                 if (sufixoCarregado) {
                     sufixoCharCode++;
-                    tentarCarregarSufixo(); // Tenta o próximo sufixo
+                    tentarCarregarSufixo();
                 } else {
-                    // Se a base não carregou E o sufixo 'a' também não, mostra aviso
                     if (!baseCarregada && sufixoCharCode === 97 && !algumaImagemCarregada) {
                         const aviso = document.createElement("p");
                         aviso.textContent = `[Imagem(ns) não encontrada(s) para questão ${numeroQuestao}]`;
@@ -92,108 +103,79 @@ function carregarImagensQuestao(numeroQuestao, containerImagens) {
                 }
             });
         }
-        // Inicia a tentativa de carregar sufixos
         tentarCarregarSufixo();
     });
 }
 
-function carregarQuestoes() {
-    const container = document.getElementById("questoes");
-    container.innerHTML = ''; // Limpa questões anteriores
-    const totalQuestoes = Object.keys(gabarito).length;
+function mostrarQuestao(index) {
+    if (index < 0 || index >= questoesIds.length) return;
 
-    if (totalQuestoes === 0) {
-        container.innerHTML = '<p style="color: red;">Nenhuma questão encontrada no gabarito.</p>';
-        return;
-    }
+    questaoAtualIndex = index;
+    const numeroQuestao = questoesIds[index];
+    
+    document.getElementById("question-number").textContent = `Questão ${numeroQuestao}`;
+    carregarImagensQuestao(numeroQuestao, document.getElementById("question-images"));
 
-    // Itera usando as chaves do gabarito para garantir a ordem correta
-    // Assumindo que as chaves no JSON estão como "1", "2", ... "90"
-    const numerosQuestoes = Object.keys(gabarito).sort((a, b) => parseInt(a) - parseInt(b));
-
-    numerosQuestoes.forEach(numero => {
-        const divQuestao = document.createElement("div");
-        divQuestao.className = "question";
-        divQuestao.id = `questao-${numero}`;
-
-        const titulo = document.createElement("h3");
-        titulo.textContent = `Questão ${numero}`;
-        divQuestao.appendChild(titulo);
-
-        const divImagens = document.createElement("div");
-        divImagens.className = "imagens-questao"; // Classe para estilização se necessário
-        divQuestao.appendChild(divImagens);
-
-        // Carrega as imagens da questão (convertendo o número para remover zeros à esquerda)
-        carregarImagensQuestao(parseInt(numero, 10).toString(), divImagens);
-
-        // Adiciona o seletor de resposta
-        const label = document.createElement("label");
-        label.textContent = "Resposta: ";
-        const select = document.createElement("select");
-        // Usa o número da questão (que é a chave do gabarito) como ID
-        select.id = `q${numero}`;
-        select.name = `resposta_q${numero}`;
-        // Adiciona opções
-        ["--", "A", "B", "C", "D", "E"].forEach(optValue => {
-            const option = document.createElement("option");
-            option.value = optValue === "--" ? "" : optValue;
-            option.textContent = optValue;
-            select.appendChild(option);
-        });
-        label.appendChild(select);
-        divQuestao.appendChild(document.createElement("br"));
-        divQuestao.appendChild(label);
-
-        container.appendChild(divQuestao);
-    });
-}
-
-function verificarRespostas() {
-    let acertos = 0;
-    const total = Object.keys(gabarito).length;
-    let respostasUsuario = {};
-
-    if (total === 0) {
-        alert("Não há questões para verificar.");
-        return;
-    }
-
-    Object.keys(gabarito).forEach(numero => {
-        const select = document.getElementById(`q${numero}`);
-        const respostaSelecionada = select ? select.value : ""; // Obtém a resposta do select
-        respostasUsuario[numero] = respostaSelecionada;
-
-        // Compara com o gabarito (case-insensitive pode ser útil)
-        if (respostaSelecionada && gabarito[numero] && respostaSelecionada.toUpperCase() === gabarito[numero].toUpperCase()) {
-            acertos++;
-            // Opcional: Adicionar feedback visual (ex: mudar borda do div da questão)
-            document.getElementById(`questao-${numero}`)?.classList.add('correct');
-            document.getElementById(`questao-${numero}`)?.classList.remove('incorrect');
-        } else if (respostaSelecionada) {
-            // Opcional: Adicionar feedback visual para erro
-            document.getElementById(`questao-${numero}`)?.classList.add('incorrect');
-            document.getElementById(`questao-${numero}`)?.classList.remove('correct');
-        } else {
-             // Opcional: Remover classes se não respondeu
-             document.getElementById(`questao-${numero}`)?.classList.remove('correct', 'incorrect');
+    // Limpa seleção anterior e marca a atual (se houver)
+    document.querySelectorAll(".answer-button").forEach(btn => {
+        btn.classList.remove("selected");
+        if (respostasUsuario[numeroQuestao] === btn.dataset.option) {
+            btn.classList.add("selected");
         }
     });
 
-    // Exibe o resultado
-    alert(`Você acertou ${acertos} de ${total} questões.`);
+    // Atualiza estado dos botões de navegação
+    document.getElementById("prev-button").disabled = index === 0;
+    document.getElementById("next-button").style.display = index === questoesIds.length - 1 ? "none" : "inline-block";
+    document.getElementById("finish-button").style.display = index === questoesIds.length - 1 ? "inline-block" : "none";
 
-    // Aqui você poderia exibir um resumo mais detalhado em vez do alert
-    // console.log("Respostas do usuário:", respostasUsuario);
-    // console.log("Gabarito:", gabarito);
+    // Salva progresso no localStorage
+    salvarProgresso();
 }
 
-// Adiciona listener ao botão de verificar
-document.addEventListener('DOMContentLoaded', () => {
-    const btnVerificar = document.getElementById('verificarBtn');
-    if (btnVerificar) {
-        btnVerificar.addEventListener('click', verificarRespostas);
-    } else {
-        console.error('Botão de verificação não encontrado.');
+function selecionarResposta(opcao) {
+    const numeroQuestao = questoesIds[questaoAtualIndex];
+    respostasUsuario[numeroQuestao] = opcao;
+
+    // Atualiza visualmente os botões
+    document.querySelectorAll(".answer-button").forEach(btn => {
+        btn.classList.remove("selected");
+        if (btn.dataset.option === opcao) {
+            btn.classList.add("selected");
+        }
+    });
+
+    // Avança para a próxima questão automaticamente (conforme solicitado)
+    // Adiciona um pequeno delay para o usuário ver a seleção
+    setTimeout(() => {
+        if (questaoAtualIndex < questoesIds.length - 1) {
+            mostrarProximaQuestao();
+        } else {
+            // Se for a última questão, apenas salva (não avança)
+            salvarProgresso();
+        }
+    }, 300); // Delay de 300ms
+}
+
+function mostrarProximaQuestao() {
+    if (questaoAtualIndex < questoesIds.length - 1) {
+        mostrarQuestao(questaoAtualIndex + 1);
     }
-});
+}
+
+function mostrarQuestaoAnterior() {
+    if (questaoAtualIndex > 0) {
+        mostrarQuestao(questaoAtualIndex - 1);
+    }
+}
+
+function salvarProgresso() {
+    localStorage.setItem(`respostas_${ano}_${dia}`, JSON.stringify(respostasUsuario));
+}
+
+function finalizarSimulado() {
+    salvarProgresso(); // Garante que a última resposta foi salva
+    // Redireciona para a página de revisão, passando ano e dia
+    window.location.href = `revisao.html?ano=${ano}&dia=${dia}`;
+}
+
