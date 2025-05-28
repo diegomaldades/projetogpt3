@@ -4,93 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Simulado ENEM</title>
-  <!-- Usar um CSS específico para o simulado ou adaptar o geral -->
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Estilos específicos para a página do simulado */
-    .question-container {
-      margin-bottom: 30px;
-      background-color: #1e1e1e;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: left;
-    }
-    .question-container img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      margin: 15px auto;
-    }
-    .question-title {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-    .answer-options {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .answer-button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 5px;
-      cursor: pointer;
-      border: 1px solid #ccc;
-      background-color: #f0f0f0;
-      color: #333;
-      border-radius: 5px;
-      min-width: 50px;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-    .answer-button:hover {
-      background-color: #e0e0e0;
-    }
-    .answer-button.selected {
-      background-color: #4CAF50; /* Verde quando selecionado */
-      color: white;
-      border-color: #4CAF50;
-    }
-    .navigation-buttons {
-      text-align: center;
-      margin-top: 30px;
-    }
-    .nav-button {
-      padding: 12px 25px;
-      font-size: 16px;
-      margin: 0 10px;
-      cursor: pointer;
-      border: none;
-      border-radius: 5px;
-      background-color: #2196F3; /* Azul para navegação */
-      color: white;
-      transition: background-color 0.3s;
-    }
-    .nav-button:hover {
-      opacity: 0.9;
-    }
-    .nav-button:disabled {
-        background-color: #555;
-        cursor: not-allowed;
-        opacity: 0.6;
-    }
-    #finish-button {
-        background-color: #f44336; /* Vermelho para finalizar */
-    }
-  </style>
+  <link rel="stylesheet" href="style.css"> <!-- Link para o CSS geral -->
+  <link rel="stylesheet" href="simulado_style.css"> <!-- Link para CSS específico do simulado -->
+
 </head>
 <body>
-  <h1 id="simulado-header">Simulado ENEM</h1>
+  <div class="header-container">
+    <button id="hub-button" class="nav-button hub-button">Voltar ao Hub</button>
+    <h1 id="simulado-header">Simulado ENEM</h1>
+  </div>
 
-  <div id="question-area">
-    <!-- A questão atual será carregada aqui pelo JavaScript -->
-    <div class="question-container" style="display: none;">
+  <!-- Seleção de Idioma -->
+  <div id="language-selection" style="text-align: center; padding: 30px; display: none;">
+    <h2>Escolha o Idioma da Prova de Língua Estrangeira (Questões 1-5)</h2>
+    <button id="lang-en-button" class="nav-button">Inglês</button>
+    <button id="lang-es-button" class="nav-button">Espanhol</button>
+    <p style="margin-top: 15px; font-size: 0.9em; color: #ccc;">Sua escolha será salva para este simulado.</p>
+  </div>
+
+  <!-- Área da Questão -->
+  <div id="question-area" style="display: none;"> <!-- Começa escondido -->
+    <div class="question-container">
         <div class="question-title" id="question-number">Questão X</div>
         <div class="imagens-questao" id="question-images">
-            <!-- Imagens da questão -->
+            <!-- Imagens da questão serão carregadas aqui -->
         </div>
         <div class="answer-options" id="question-answers">
-            <!-- Botões de resposta A-E -->
             <button class="answer-button" data-option="A">A</button>
             <button class="answer-button" data-option="B">B</button>
             <button class="answer-button" data-option="C">C</button>
@@ -98,16 +37,17 @@
             <button class="answer-button" data-option="E">E</button>
         </div>
     </div>
-    <div id="loading-message" style="text-align: center; padding: 50px;">Carregando questões...</div>
+    <div id="loading-message" style="text-align: center; padding: 50px; display: block;">Carregando gabarito...</div> <!-- Mensagem inicial -->
   </div>
 
-  <div class="navigation-buttons">
+  <!-- Botões de Navegação -->
+  <div class="navigation-buttons" style="display: none;"> <!-- Começa escondido -->
     <button id="prev-button" class="nav-button" disabled>Anterior</button>
     <button id="next-button" class="nav-button">Próxima</button>
-    <button id="finish-button" class="nav-button" style="display: none;">Finalizar Simulado</button>
+    <button id="finish-button" class="nav-button finish-button" style="display: none;">Finalizar Simulado</button>
   </div>
 
-  <!-- Link para o novo JavaScript do simulado -->
   <script src="simulado.js"></script>
 </body>
 </html>
+

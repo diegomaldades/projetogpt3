@@ -1,0 +1,207 @@
+/* Estilos específicos para a página do simulado */
+body {
+    background-color: #121212; /* Fundo escuro */
+    color: #e0e0e0; /* Texto claro */
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ajusta espaço entre botão e título */
+    padding: 10px 20px;
+    background-color: #1e1e1e; /* Fundo ligeiramente mais claro para o header */
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#simulado-header {
+    text-align: center;
+    margin: 0; /* Remove margem padrão do h1 */
+    flex-grow: 1; /* Permite que o título ocupe espaço */
+    color: #ffffff;
+}
+
+.hub-button {
+    background-color: #6c757d; /* Cinza para o botão Voltar */
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+#language-selection {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+#language-selection h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+#language-selection .nav-button {
+    background-color: #007bff; /* Azul para botões de idioma */
+}
+
+.question-container {
+    margin-bottom: 30px;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+    border: 1px solid #333; /* Borda sutil */
+}
+
+.question-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto; /* Aumenta margem vertical */
+    border-radius: 5px;
+}
+
+.question-title {
+    text-align: center;
+    margin-bottom: 25px; /* Aumenta espaço */
+    font-size: 1.6em; /* Aumenta tamanho */
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.answer-options {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.answer-button {
+    padding: 12px 25px; /* Aumenta padding */
+    font-size: 16px;
+    margin: 8px; /* Aumenta margem */
+    cursor: pointer;
+    border: 1px solid #555; /* Borda mais escura */
+    background-color: #333; /* Fundo escuro para botões */
+    color: #e0e0e0; /* Texto claro */
+    border-radius: 5px;
+    min-width: 60px; /* Aumenta largura mínima */
+    transition: background-color 0.3s, border-color 0.3s, transform 0.1s;
+}
+
+.answer-button:hover {
+    background-color: #444;
+    border-color: #777;
+}
+
+.answer-button.selected {
+    background-color: #FFA500; /* Laranja quando selecionado */
+    color: #121212; /* Texto escuro para contraste */
+    border-color: #FFA500;
+    font-weight: bold;
+    transform: scale(1.05); /* Leve aumento ao selecionar */
+}
+
+.navigation-buttons {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #333; /* Linha separadora */
+}
+
+.nav-button {
+    padding: 12px 25px;
+    font-size: 16px;
+    margin: 0 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Azul padrão para navegação */
+    color: white;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+.nav-button:hover {
+    opacity: 0.85;
+}
+
+.nav-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.finish-button {
+    background-color: #dc3545; /* Vermelho para finalizar */
+}
+
+#loading-message {
+    color: #ccc;
+    font-size: 1.2em;
+}
+
+/* Estilos para a página de revisão (se existir um revisao_style.css, mover para lá) */
+.results-summary {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+.results-summary h2 {
+    margin-top: 0;
+    color: #ffffff;
+}
+
+.review-question {
+    background-color: #2a2a2a; /* Cor ligeiramente diferente para questões na revisão */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 5px solid;
+}
+
+.review-question.correct {
+    border-left-color: #28a745; /* Verde para correto */
+}
+
+.review-question.incorrect {
+    border-left-color: #dc3545; /* Vermelho para incorreto */
+}
+
+.review-question p {
+    margin: 5px 0;
+}
+
+.review-question strong {
+    color: #ffffff;
+}
+
+/* Adicionar responsividade básica */
+@media (max-width: 600px) {
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #simulado-header {
+        margin-top: 10px;
+        text-align: left;
+    }
+    .nav-button {
+        padding: 10px 15px;
+        font-size: 14px;
+        margin: 5px;
+    }
+    .answer-button {
+        padding: 10px 15px;
+        font-size: 14px;
+        margin: 5px;
+        min-width: 50px;
+    }
+    .question-title {
+        font-size: 1.4em;
+    }
+}
+
